@@ -4,7 +4,7 @@ $dom = new DOMDocument();
 $dom->load("sample.tcx");
 
 $xpath = new DOMXpath($dom);
-$xpath->registerNamespace('garmin', "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"); 
+$xpath->registerNamespace('tcx', "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"); 
 
 /*
 From this file we want.
@@ -12,9 +12,14 @@ From this file we want.
 /Time
 /HeartRateBpm/Value
 */
-$items = $xpath->query("//garmin:Trackpoint");
+$items = $xpath->query("//tcx:Trackpoint");
 
+$points = array();
 foreach( $items as $item ) {
-	echo $xpath->evaluate("string(garmin:Time)", $item) . "\n";
-	echo $xpath->evaluate("string(garmin:HeartRateBpm/garmin:Value)", $item) . "\n";
+	$points[] = array(
+		"timestamp" => $xpath->evaluate("string(tcx:Time)", $item),
+		"heartrate" => $xpath->evaluate("string(tcx:HeartRateBpm/tcx:Value)", $item),
+	);
 }
+
+print_r($points);
