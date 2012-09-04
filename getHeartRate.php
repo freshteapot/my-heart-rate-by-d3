@@ -14,12 +14,8 @@ From this file we want.
 */
 $items = $xpath->query("//tcx:Trackpoint");
 
-$points = array();
+$pointsSimple = array();
 foreach( $items as $item ) {
-	$points[] = array(
-		"timestamp" => $xpath->evaluate("string(tcx:Time)", $item),
-		"heartrate" => $xpath->evaluate("string(tcx:HeartRateBpm/tcx:Value)", $item),
-	);
+	$pointsSimple[] = $xpath->evaluate("string(tcx:HeartRateBpm/tcx:Value)", $item);
 }
-
-print_r($points);
+echo json_encode($pointsSimple);
